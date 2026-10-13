@@ -1,0 +1,17 @@
+.env
+.venv/
+__pycache__/
+*.py[cod]
+output/
+source_files/
+analysis_input/
+calibration/
+tools/
+*.blend
+*.stl
+*.png
+*.jpg
+*.jpeg
+*.zip
+
+__pycache__/

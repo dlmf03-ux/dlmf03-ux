@@ -1,0 +1,14 @@
+**/bin/
+**/obj/
+**/Output/
+**/output/
+**/__pycache__/
+**/*.py[cod]
+**/config.php
+**/*.log
+**/sample-library/**
+!**/sample-library/.gitkeep
+**/appsettings.local.json
+*.user
+*.suo
+.vs/

@@ -1,0 +1,10 @@
+RewriteEngine On
+
+RewriteRule ^$ public/index.php [L]
+RewriteRule ^s/([a-z_]+)$ public/survey.php?form=$1 [L,QSA]
+RewriteRule ^(login|logout|import|responses|surveys|survey|help)\.php$ public/$1.php [L,QSA]
+RewriteRule ^assets/(.*)$ public/assets/$1 [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ public/$1 [L]

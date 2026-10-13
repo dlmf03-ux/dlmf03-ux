@@ -1,0 +1,25 @@
+[hidden]{display:none!important}
+.practice-shortcuts{display:grid;gap:8px;margin-top:16px}.practice-shortcuts a{color:#fff;font-size:14px}
+.sidebar{overflow-y:auto}.sidebar nav{margin-top:18px}.sidebar .brand{flex-shrink:0}.user-box{min-height:62px;flex-shrink:0}
+.official-logo{display:block;width:100%;max-width:325px;height:auto;background:#fff;padding:8px;border-radius:8px;margin:0 0 22px}
+.sidebar .official-logo{margin:0}
+.logout-button{background:transparent;border:0;color:#fff;font-size:20px}
+.user-box form{margin-left:auto}
+.brand{text-decoration:none}
+.brand-mark{flex-shrink:0}
+.service-card b,.cart-row-head b{font-size:14px}
+label,.row-link,.panel-head p{font-size:14px}
+.service-card small,.safe-note{font-size:12px}
+td{overflow-wrap:anywhere}
+.service-table td:first-child{width:45px}
+.service-table input{width:100%}
+.service-table td:nth-child(2){min-width:320px}
+.order-layout{grid-template-columns:minmax(0,1fr) 340px}
+.two-cols{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr)}
+.order-detail{grid-template-columns:minmax(0,1fr) 320px}
+.welcome{flex-wrap:wrap}
+.quick-search{flex:1;max-width:460px}
+.cart-controls input{min-width:0;width:100%}
+.audit-details{white-space:pre-wrap;max-width:600px;max-height:180px;overflow:auto;font-size:12px}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+@media(max-width:1150px){.order-layout,.two-cols,.order-detail{grid-template-columns:1fr}.cart{position:static}}

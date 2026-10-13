@@ -1,0 +1,55 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Neutral demo color palette. -->
+
+    <!-- Основные -->
+    <Color x:Key="BrandCyanColor">#FF66B2FF</Color>
+    <Color x:Key="BrandTealColor">#FF3673A8</Color>
+    <Color x:Key="BrandNavyColor">#FF22324A</Color>
+    <Color x:Key="BrandDeepColor">#FF172033</Color>
+
+    <!-- Дополнительные -->
+    <Color x:Key="BrandLightBlueColor">#FFE7EDF5</Color>
+    <Color x:Key="BrandGrayBlueColor">#FFA7B2C5</Color>
+    <Color x:Key="BrandInkColor">#FF182238</Color>
+    <Color x:Key="BrandPaperColor">#FFF8FAFC</Color>
+    <Color x:Key="BrandBeigeColor">#FFE3E8EF</Color>
+    <Color x:Key="BrandTanColor">#FFBCC5D2</Color>
+
+    <!-- Сигнальные / акцентные -->
+    <Color x:Key="BrandOrangeColor">#FFFFB454</Color>
+    <Color x:Key="BrandMagentaColor">#FFE66C8A</Color>
+    <Color x:Key="BrandMintColor">#FF52C7A5</Color>
+
+    <!-- Кисти -->
+    <SolidColorBrush x:Key="BrandCyanBrush"        Color="{StaticResource BrandCyanColor}"/>
+    <SolidColorBrush x:Key="BrandTealBrush"        Color="{StaticResource BrandTealColor}"/>
+    <SolidColorBrush x:Key="BrandNavyBrush"        Color="{StaticResource BrandNavyColor}"/>
+    <SolidColorBrush x:Key="BrandDeepBrush"        Color="{StaticResource BrandDeepColor}"/>
+    <SolidColorBrush x:Key="BrandLightBlueBrush"   Color="{StaticResource BrandLightBlueColor}"/>
+    <SolidColorBrush x:Key="BrandGrayBlueBrush"    Color="{StaticResource BrandGrayBlueColor}"/>
+    <SolidColorBrush x:Key="BrandInkBrush"         Color="{StaticResource BrandInkColor}"/>
+    <SolidColorBrush x:Key="BrandPaperBrush"       Color="{StaticResource BrandPaperColor}"/>
+    <SolidColorBrush x:Key="BrandBeigeBrush"       Color="{StaticResource BrandBeigeColor}"/>
+    <SolidColorBrush x:Key="BrandTanBrush"         Color="{StaticResource BrandTanColor}"/>
+    <SolidColorBrush x:Key="BrandOrangeBrush"      Color="{StaticResource BrandOrangeColor}"/>
+    <SolidColorBrush x:Key="BrandMagentaBrush"     Color="{StaticResource BrandMagentaColor}"/>
+    <SolidColorBrush x:Key="BrandMintBrush"        Color="{StaticResource BrandMintColor}"/>
+
+    <SolidColorBrush x:Key="WhiteBrush"            Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="MutedTextBrush"        Color="#FFB7C5CC"/>
+    <SolidColorBrush x:Key="DividerBrush"          Color="#FF354760"/>
+
+    <!-- Theme gradients -->
+    <LinearGradientBrush x:Key="BrandHeroGradient" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="{StaticResource BrandTealColor}" Offset="0"/>
+        <GradientStop Color="{StaticResource BrandCyanColor}" Offset="1"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="BrandDarkGradient" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="{StaticResource BrandDeepColor}" Offset="0"/>
+        <GradientStop Color="{StaticResource BrandNavyColor}" Offset="1"/>
+    </LinearGradientBrush>
+
+</ResourceDictionary>

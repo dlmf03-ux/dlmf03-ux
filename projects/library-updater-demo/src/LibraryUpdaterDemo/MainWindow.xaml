@@ -1,0 +1,227 @@
+<Window x:Class="LibraryUpdaterDemo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:LibraryUpdaterDemo.ViewModels"
+        xmlns:views="clr-namespace:LibraryUpdaterDemo.Views"
+        xmlns:conv="clr-namespace:LibraryUpdaterDemo.Converters"
+        Title="Library Updater Demo"
+        Width="1100" Height="720" MinWidth="900" MinHeight="600"
+        Style="{StaticResource BrandWindowStyle}"
+        WindowStartupLocation="CenterScreen"
+        StateChanged="MainWindow_OnStateChanged"
+        Closing="MainWindow_OnClosing">
+
+    <Window.Resources>
+        <conv:StatusToBrushConverter x:Key="StatusToBrush"/>
+        <conv:LogLevelToBrushConverter x:Key="LogLevelToBrush"/>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>     <!-- Header -->
+            <RowDefinition Height="Auto"/>     <!-- Compatibility warning -->
+            <RowDefinition Height="Auto"/>     <!-- Auto-check + Загрузить данные -->
+            <RowDefinition Height="*" MinHeight="220"/>     <!-- Tabs -->
+            <RowDefinition Height="Auto"/>     <!-- Log panel -->
+            <RowDefinition Height="Auto"/>     <!-- Bottom bar -->
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="{StaticResource BrandNavyBrush}"
+                CornerRadius="0,0,8,8" Padding="20,10">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="12" ShadowDepth="2"/>
+            </Border.Effect>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Width="48" Height="48" CornerRadius="8"
+                        Background="{StaticResource BrandTealBrush}" VerticalAlignment="Center">
+                    <TextBlock Text="LIB" Foreground="White" FontWeight="Bold"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+
+                <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="20,0,0,0">
+                    <TextBlock Text="LIBRARY UPDATER" Foreground="White"
+                               FontFamily="{StaticResource HeadingFont}"
+                               FontSize="18" FontWeight="Bold"/>
+                    <TextBlock Text="Установка и обновление библиотек exocad"
+                               Foreground="#E6F8FB" FontSize="11" Margin="0,2,0,0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding StatusText}"
+                               HorizontalAlignment="Right"
+                               Foreground="White" FontWeight="SemiBold" FontSize="11"/>
+                    <ProgressBar IsIndeterminate="{Binding IsBusy}"
+                                 Visibility="{Binding IsBusy, Converter={StaticResource BoolToVis}}"
+                                 Width="180" Height="3" Margin="0,5,0,0"
+                                 Background="#2200000F"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- ========== Auto-check + Загрузить данные (одна компактная карточка) ========== -->
+        <Border Grid.Row="1" Margin="14,10,14,0" Padding="12,9"
+                Background="#332F1A0B" BorderBrush="{StaticResource BrandOrangeBrush}"
+                BorderThickness="1" CornerRadius="6">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Border Width="30" Height="30" CornerRadius="15"
+                        Background="{StaticResource BrandOrangeBrush}"
+                        VerticalAlignment="Center" Margin="0,0,10,0">
+                    <TextBlock Text="!" Foreground="{StaticResource BrandDeepBrush}"
+                               FontFamily="{StaticResource HeadingFont}" FontSize="19"
+                               FontWeight="Bold" HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                </Border>
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock Text="Важная информация о совместимости"
+                               Foreground="{StaticResource BrandOrangeBrush}"
+                               FontFamily="{StaticResource HeadingFont}"
+                               FontWeight="SemiBold" FontSize="12"/>
+                    <TextBlock Margin="0,2,0,0" TextWrapping="Wrap"
+                               Foreground="{StaticResource BrandLightBlueBrush}"
+                               Text="Проверяйте совместимость файлов с вашей версией CAD-программы и сохраняйте резервные копии перед обновлением."/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="2" Style="{StaticResource CardBorder}" Margin="14,10,14,8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <CheckBox Grid.Column="0" Content="Авто-проверка"
+                          IsChecked="{Binding AutoCheckEnabled}"
+                          VerticalAlignment="Center" Margin="0,0,16,0"/>
+
+                <TextBlock Grid.Column="1" Text="каждые"
+                           VerticalAlignment="Center" Margin="0,0,4,0"
+                           Foreground="{StaticResource BrandLightBlueBrush}"/>
+                <TextBox Grid.Column="2" Width="44"
+                         Text="{Binding CheckIntervalDays, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Grid.Column="3" Text="дн."
+                           VerticalAlignment="Center" Margin="4,0,16,0"
+                           Foreground="{StaticResource BrandLightBlueBrush}"/>
+
+                <CheckBox Grid.Column="4" Content="Сворачивать в трей при закрытии окна"
+                          IsChecked="{Binding MinimizeToTrayOnClose}"
+                          VerticalAlignment="Center"/>
+
+                <Button Grid.Column="5" Content="Загрузить данные" Margin="0,0,8,0"
+                        Command="{Binding DownloadCsvCommand}"
+                        Style="{StaticResource SubtleButton}"/>
+
+                <Button Grid.Column="6" Content="Проверить сейчас"
+                        Command="{Binding CheckForUpdatesCommand}"
+                        Style="{StaticResource AccentButton}"/>
+            </Grid>
+        </Border>
+
+        <!-- ========== TabControl ========== -->
+        <TabControl Grid.Row="3" ItemsSource="{Binding Tabs}" Margin="14,0,14,0">
+            <TabControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type vm:LibraryTabViewModel}">
+                    <TextBlock Text="{Binding Title}"/>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate DataType="{x:Type vm:LibraryTabViewModel}">
+                    <views:LibraryTabView/>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+
+        <!-- ========== Лог-панель внизу (компактная, ~110px) ========== -->
+        <Border Grid.Row="4" Style="{StaticResource CardBorder}"
+                Margin="14,8,14,4" Padding="10,6" Height="110">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0" Margin="0,0,0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Журнал" Style="{StaticResource SubheadingTextStyle}"
+                               VerticalAlignment="Center"/>
+                    <Button Grid.Column="2" Content="Сохранить"
+                            Command="{Binding SaveLogCommand}"
+                            Style="{StaticResource SubtleButton}"
+                            Padding="8,2" MinHeight="22" FontSize="11"/>
+                </Grid>
+                <ListBox Grid.Row="1" ItemsSource="{Binding Log.Entries}"
+                         Background="Transparent" BorderThickness="0"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto"
+                         x:Name="LogList">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Padding" Value="0,0"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListBoxItem">
+                                        <ContentPresenter/>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Display}"
+                                       Foreground="{Binding Level, Converter={StaticResource LogLevelToBrush}}"
+                                       FontFamily="Consolas, Cascadia Code, Segoe UI Mono"
+                                       FontSize="10" TextWrapping="NoWrap"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </Border>
+
+        <!-- ========== Bottom bar ========== -->
+        <Border Grid.Row="5" Background="{StaticResource BrandNavyBrush}"
+                BorderBrush="{StaticResource DividerBrush}" BorderThickness="0,1,0,0"
+                Padding="14,4">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding StatusText}" VerticalAlignment="Center"
+                           Foreground="{StaticResource MutedTextBrush}" FontSize="11"/>
+                <TextBlock Grid.Column="1"
+                           Text="version 1.5"
+                           Foreground="{StaticResource MutedTextBrush}" FontSize="11"
+                           VerticalAlignment="Center" Margin="0,0,18,0"/>
+                <TextBlock Grid.Column="2"
+                           Text="⚠ Активное VPN-соединение может помешать загрузке библиотек"
+                           Foreground="{StaticResource BrandOrangeBrush}" FontSize="11"
+                           VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+
+    </Grid>
+</Window>

@@ -1,0 +1,6 @@
+.env
+__pycache__/
+*.py[cod]
+data/assistant.sqlite3
+data/assistant.sqlite3-*
+*.log

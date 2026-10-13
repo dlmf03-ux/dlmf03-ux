@@ -1,0 +1,8 @@
+storage
+tmp
+output
+tools
+public/assets/logo.png
+*.zip
+*.sqlite*
+install-token.txt

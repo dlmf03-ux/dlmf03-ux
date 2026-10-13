@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>LibraryUpdaterDemo</RootNamespace>
+    <AssemblyName>LibraryUpdaterDemo</AssemblyName>
+    <Version>1.5.0</Version>
+    <Company>Portfolio Demo</Company>
+    <Product>Library Updater Demo</Product>
+    <Copyright>Portfolio Demo</Copyright>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
+    <PackageReference Include="H.NotifyIcon.Wpf" Version="2.1.4" />
+    <PackageReference Include="SharpCompress" Version="0.38.0" />
+    <PackageReference Include="SharpVectors.Wpf" Version="1.8.4.1" />
+  </ItemGroup>
+
+</Project>

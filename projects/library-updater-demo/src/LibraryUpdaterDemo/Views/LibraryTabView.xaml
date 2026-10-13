@@ -1,0 +1,181 @@
+<UserControl x:Class="LibraryUpdaterDemo.Views.LibraryTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:LibraryUpdaterDemo.ViewModels"
+             xmlns:conv="clr-namespace:LibraryUpdaterDemo.Converters"
+             d:DataContext="{d:DesignInstance Type=vm:LibraryTabViewModel}"
+             mc:Ignorable="d"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             Background="Transparent">
+
+    <UserControl.Resources>
+        <conv:StatusToBrushConverter x:Key="StatusToBrush"/>
+        <conv:InverseBoolConverter x:Key="InvBool"/>
+    </UserControl.Resources>
+
+    <Grid Margin="0,8,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>     <!-- Path + Scan + Filters bar -->
+            <RowDefinition Height="*" MinHeight="160"/>   <!-- Sub-tabs (с DataGrid внутри) -->
+        </Grid.RowDefinitions>
+
+        <!-- Путь + Scan в одной компактной полосе -->
+        <Border Grid.Row="0" Style="{StaticResource CardBorder}" Margin="0,0,0,6">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Путь"
+                           Style="{StaticResource SubheadingTextStyle}"
+                           VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <TextBox Grid.Column="1"
+                         Text="{Binding LibraryPath, UpdateSourceTrigger=PropertyChanged}"/>
+                <Button Grid.Column="2" Content="Обзор" Margin="6,0,0,0"
+                        Command="{Binding BrowseFolderCommand}"
+                        Style="{StaticResource SubtleButton}"/>
+                <Button Grid.Column="3" Content="Из ярлыка exocad" Margin="6,0,0,0"
+                        Command="{Binding PickShortcutCommand}"
+                        Style="{StaticResource SubtleButton}"/>
+                <Button Grid.Column="4" Content="СКАНИРОВАТЬ" Margin="10,0,0,0"
+                        Command="{Binding ScanCommand}"
+                        Style="{StaticResource AccentButton}"
+                        FontWeight="SemiBold"/>
+            </Grid>
+        </Border>
+
+        <!-- Sub-tabs -->
+        <TabControl Grid.Row="1">
+            <!-- ========== УСТАНОВКА ========== -->
+            <TabItem Header="Установка">
+                <Grid Margin="0,8,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>     <!-- Filters -->
+                        <RowDefinition Height="*" MinHeight="120"/>   <!-- DataGrid -->
+                    </Grid.RowDefinitions>
+
+                    <!-- Фильтры в одной строке (включая «Показать актуальные») -->
+                    <Border Style="{StaticResource CardBorder}" Margin="0,0,0,4">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="Поиск:" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                            <TextBox Grid.Column="1"
+                                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
+
+                            <TextBlock Grid.Column="2" Text="Supplier:" VerticalAlignment="Center" Margin="10,0,4,0"/>
+                            <ComboBox Grid.Column="3"
+                                      ItemsSource="{Binding Suppliers}"
+                                      SelectedItem="{Binding SelectedSupplier}"/>
+
+                            <TextBlock Grid.Column="4" Text="Категория:" VerticalAlignment="Center" Margin="10,0,4,0"/>
+                            <ComboBox Grid.Column="5"
+                                      ItemsSource="{Binding Categories}"
+                                      SelectedItem="{Binding SelectedCategory}"/>
+
+                            <TextBlock Grid.Column="6" Text="Система:" VerticalAlignment="Center" Margin="10,0,4,0"/>
+                            <ComboBox Grid.Column="7"
+                                      ItemsSource="{Binding Subcategories}"
+                                      SelectedItem="{Binding SelectedSubcategory}"/>
+
+                            <CheckBox Grid.Column="8" Content="Показать актуальные"
+                                      IsChecked="{Binding ShowActual}"
+                                      VerticalAlignment="Center" Margin="14,0,0,0"/>
+                        </Grid>
+                    </Border>
+
+                    <DataGrid Grid.Row="1"
+                              ItemsSource="{Binding InstallView}"
+                              SelectionMode="Single"
+                              ColumnWidth="Auto">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Установить" Width="Auto" CanUserSort="False">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox HorizontalAlignment="Center"
+                                                  IsChecked="{Binding Installed, Mode=OneWay}"
+                                                  IsEnabled="{Binding IsBusy, Converter={StaticResource InvBool}}"
+                                                  Checked="InstallCheckBox_OnChecked"
+                                                  Tag="{Binding}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="Auto"/>
+                            <DataGridTextColumn Header="Доступная версия" Binding="{Binding AvailableVersion}" Width="Auto"/>
+                            <DataGridTemplateColumn Header="Статус" Width="Auto">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Status}"
+                                                   Foreground="{Binding Status, Converter={StaticResource StatusToBrush}}"
+                                                   FontWeight="SemiBold"
+                                                   VerticalAlignment="Center"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Supplier" Binding="{Binding Supplier}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <!-- ========== ОБНОВЛЕНИЕ ========== -->
+            <TabItem Header="Обновление">
+                <Grid Margin="0,8,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" MinHeight="120"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <DataGrid Grid.Row="0"
+                              x:Name="UpdateGrid"
+                              ItemsSource="{Binding UpdateItems}"
+                              SelectionMode="Extended"
+                              ColumnWidth="Auto">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="Auto"/>
+                            <DataGridTextColumn Header="Путь" Binding="{Binding RelativePath}" Width="*"/>
+                            <DataGridTextColumn Header="Текущая версия" Binding="{Binding Version}" Width="Auto"/>
+                            <DataGridTextColumn Header="Доступная версия" Binding="{Binding AvailableVersion}" Width="Auto"/>
+                            <DataGridTemplateColumn Header="Статус" Width="Auto">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Status}"
+                                                   Foreground="{Binding Status, Converter={StaticResource StatusToBrush}}"
+                                                   FontWeight="SemiBold"
+                                                   VerticalAlignment="Center"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Supplier" Binding="{Binding Supplier}" Width="Auto"/>
+                            <DataGridTextColumn Header="Бэкап" Binding="{Binding BackupMark}" Width="Auto"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <StackPanel Grid.Row="1" Orientation="Horizontal"
+                                HorizontalAlignment="Right" Margin="0,8,0,0">
+                        <Button Content="ОБНОВИТЬ ВСЕ" MinWidth="140" Margin="0,0,8,0"
+                                Style="{StaticResource SubtleButton}"
+                                Click="UpdateAll_OnClick"/>
+                        <Button Content="ОБНОВИТЬ ВЫБРАННЫЕ" MinWidth="180"
+                                Style="{StaticResource PrimaryButton}"
+                                Click="UpdateSelected_OnClick"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

@@ -1,0 +1,7 @@
+.env
+samples/*.eml
+public/assets/img/logo.png
+*.log
+
+# Public database schema and migrations
+!*.sql

@@ -1,0 +1,13 @@
+logs/*
+!logs/.gitkeep
+documents/*
+!documents/.gitkeep
+!documents/terms-demo.html
+!documents/privacy-demo.html
+img/*
+!img/.gitkeep
+!img/demo-mark.svg
+*.pdf
+
+# Safe demo schema
+!install.sql
